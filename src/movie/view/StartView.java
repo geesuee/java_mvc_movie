@@ -15,14 +15,14 @@ public class StartView {
 	
 	public static void reservationCheck(String crud) {
 		System.out.println("\n---------- 로그 실행 ----------");
-		if(crud == "추가") { //예약자 추가
+		if(crud.equals("추가")) {
 			logger.info("info - 예약자 추가!");
-		} else if (crud == "수정") {
-			logger.info("info - 예약자 수정!");
-		} else if (crud == "삭제") {
-			logger.info("info - 예약자 삭제!");
-		} else {
+		} else if(crud.equals("검색")) {
 			logger.info("info - 데이터 조회");
+		} else if(crud.equals("수정")) {
+			logger.info("info - 예약자 수정!");
+		} else if(crud.equals("삭제")) {
+			logger.info("info - 예약자 삭제!");
 		}
 	}
 
@@ -45,12 +45,15 @@ public class StartView {
 				if(subInput == 1) {
 					System.out.println("\n*** 01-1. 모든 Movie 검색 ***");
 					controller.getMovieList();	
+					reservationCheck("검색");
 
 					System.out.println("\n*** 01-2. 모든 Theater 검색 ***");
 					controller.getTheaterList();	
-
+					reservationCheck("검색");
+					
 					System.out.println("\n*** 01-3. 모든 Reservation 검색 ***");
 					controller.getReservationList();
+					reservationCheck("검색");
 				}
 
 				// 단일 항목 검색
@@ -61,18 +64,21 @@ public class StartView {
 					System.out.println("영화 제목을 입력해주세요.");
 					String movieTitle = br.readLine();
 					controller.getMovie(movieTitle);
+					reservationCheck("검색");
 
 					System.out.println("\n*** 01-2. 상영관 번호로 Theater 정보 검색 ***");
 
 					System.out.println("상영관 이름을 입력해주세요.");
 					String theaterName = br.readLine();
 					controller.getTheater(theaterName);
+					reservationCheck("검색");
 
 					System.out.println("\n*** 01-3. 예약자 이름으로 Reservation 정보 검색 ***");
 
 					System.out.println("예약자 이름을 입력해주세요.");
 					String name = br.readLine();
 					controller.getReservation(name);
+					reservationCheck("검색");
 				}
 				
 				// 매핑된 <Theater, Movie> 검색
@@ -80,6 +86,7 @@ public class StartView {
 					
 					System.out.println("\n*** 01. 매핑된 <Theater, Movie> 검색 ***");
 					controller.getMappedData();
+					reservationCheck("검색");
 				}
 			}		
 		
@@ -93,6 +100,7 @@ public class StartView {
 				System.out.println("\n*** 02. 예약자 정보 추가 ***");
 				System.out.println("<< 추가 전 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				// 자동으로 예약 번호 중복되지 않게 생성하여 인스턴스 생성
 				Reservation newReservation = new Reservation("김혜경", "보스 베이비2", "2관");
@@ -102,25 +110,30 @@ public class StartView {
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				System.out.println("\n02-1. 해당 상영관에서 상영하지 않는 영화 예약 추가");
 				// 수동으로 매핑되어 있지 않은 영화 할당하여 인스턴스 생성
 				Reservation newReservation1 = new Reservation("배지수", "랑종", "2관");
 				controller.insertReservation(newReservation1);
+				// => 추가 실패
 				
 				System.out.println("\n02-2. 예약 번호가 중복되는 예약 추가");
 				// 수동으로 중복되는 예약 번호 할당하여 인스턴스 생성
 				Reservation newReservation2 = new Reservation(1, "김혜경", "보스 베이비2", "2관");
 				controller.insertReservation(newReservation2);
+				// => 추가 실패
 				
 				System.out.println("\n02-3. 잔여 좌석이 없는 상영관 예약 추가");
 				// 수동으로 잔여 좌석이 없는 상영관 할당하여 인스턴스 생성
 				// 2관 보스 보스베이비2는 잔여 좌석 없음
 				Reservation newReservation3 = new Reservation("배지수", "모가디슈", "1관");
 				controller.insertReservation(newReservation3);
+				// => 추가 실패
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				//예약자 정보를 입력하여 추가 예약
 				System.out.println("\n02-4. 키보드로 예약");
@@ -133,6 +146,7 @@ public class StartView {
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 			}
 			
 //			--------------------------------------------------------------------------
@@ -144,18 +158,22 @@ public class StartView {
 				System.out.println("\n*** 03. 예약자 정보 이름으로 검색 및 수정, 수정 후 예약자 검색 ***");
 				System.out.println("<< 수정 전 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 				
 				controller.updateReservation("플레이", "정글 크루즈", "5관");
 				reservationCheck("수정");
 				
 				System.out.println("\n<< 수정 후 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 				
 				System.out.println("\n03-1. 매핑되어 있지 않은 상영관, 영화 제목으로 수정");
 				controller.updateReservation("플레이", "정글 크루즈", "7관");
+				// => 수정 실패
 				
 				System.out.println("\n<< 수정 후 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 			}
 			
 //			--------------------------------------------------------------------------
@@ -167,12 +185,14 @@ public class StartView {
 				System.out.println("\n*** 04. 홍길동 예약자 삭제 후 삭제한 예약자 검색 ***");
 				System.out.println("\n<< 삭제 전 예약자 검색 >>");
 				controller.getReservation("홍길동");
+				reservationCheck("검색");
 			
 				controller.deleteReservation("홍길동");
 				reservationCheck("삭제");
 				
 				System.out.println("\n<< 삭제 후 예약자 검색 >>");
 				controller.getReservation("홍길동");
+				reservationCheck("검색");
 			}
 			
 //			--------------------------------------------------------------------------
@@ -183,25 +203,32 @@ public class StartView {
 				// 전체 검색
 				System.out.println("\n*** 01-1. 모든 Movie 검색 ***");
 				controller.getMovieList();	
+				reservationCheck("검색");
 
 				System.out.println("\n*** 01-2. 모든 Theater 검색 ***");
-				controller.getTheaterList();	
+				controller.getTheaterList();
+				reservationCheck("검색");
 
 				System.out.println("\n*** 01-3. 모든 Reservation 검색 ***");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				// 단일 항목 검색
 				System.out.println("\n*** 01-4. 영화 제목으로 Movie 정보 검색 ***");
 				controller.getMovie("블랙 위도우");
+				reservationCheck("검색");
 
 				System.out.println("\n*** 01-5. 상영관 이름으로 Theater 정보 검색 ***");
 				controller.getTheater("10관");
+				reservationCheck("검색");
 
 				System.out.println("\n*** 01-6. 예약자 이름으로 Reservation 정보 검색 ***");
 				controller.getReservation("엔코아");
+				reservationCheck("검색");
 				
 				System.out.println("\n*** 01-7. 매핑된 <Theater, Movie> 검색 ***");
 				controller.getMappedData();
+				reservationCheck("검색");
 				
 				// -----------------------------------------------------------------------------
 				
@@ -209,6 +236,7 @@ public class StartView {
 				System.out.println("\n*** 02. 예약자 정보 추가 ***");
 				System.out.println("<< 추가 전 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				// 자동으로 예약 번호 중복되지 않게 생성하여 인스턴스 생성
 				Reservation newReservation = new Reservation("김혜경", "보스 베이비2", "2관");
@@ -218,25 +246,30 @@ public class StartView {
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				System.out.println("\n02-1. 해당 상영관에서 상영하지 않는 영화 예약 추가");
 				// 수동으로 매핑되어 있지 않은 영화 할당하여 인스턴스 생성
 				Reservation newReservation1 = new Reservation("배지수", "랑종", "2관");
 				controller.insertReservation(newReservation1);
+				// => 추가 실패
 				
 				System.out.println("\n02-2. 예약 번호가 중복되는 예약 추가");
 				// 수동으로 중복되는 예약 번호 할당하여 인스턴스 생성
 				Reservation newReservation2 = new Reservation(1, "김혜경", "보스 베이비2", "2관");
 				controller.insertReservation(newReservation2);
+				// => 추가 실패
 				
 				System.out.println("\n02-3. 잔여 좌석이 없는 상영관 예약 추가");
 				// 수동으로 잔여 좌석이 없는 상영관 할당하여 인스턴스 생성
 				// 2관 보스 보스베이비2는 잔여 좌석 없음
 				Reservation newReservation3 = new Reservation("배지수", "모가디슈", "1관");
 				controller.insertReservation(newReservation3);
+				// => 추가 실패
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				//예약자 정보를 입력하여 추가 예약
 				System.out.println("\n02-4. 키보드로 예약");
@@ -249,6 +282,7 @@ public class StartView {
 				
 				System.out.println("\n<< 추가 후 모든 예약자 검색 >>");
 				controller.getReservationList();
+				reservationCheck("검색");
 				
 				// -----------------------------------------------------------------------------
 				
@@ -256,33 +290,37 @@ public class StartView {
 				System.out.println("\n*** 03. 예약자 정보 이름으로 검색 및 수정, 수정 후 예약자 검색 ***");
 				System.out.println("<< 수정 전 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 				
 				controller.updateReservation("플레이", "정글 크루즈", "5관");
 				reservationCheck("수정");
 				
 				System.out.println("\n<< 수정 후 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 				
 				System.out.println("\n03-1. 매핑되어 있지 않은 상영관, 영화 제목으로 수정");
 				controller.updateReservation("플레이", "정글 크루즈", "7관");
+				// => 수정 실패
 				
 				System.out.println("\n<< 수정 후 예약자 검색 >>");
 				controller.getReservation("플레이");
+				reservationCheck("검색");
 
 				// -----------------------------------------------------------------------------
 				
 				// 예약자 정보 이름으로 검색 후 삭제 / 삭제 전 검색 / 삭제 후 검색
-				// 예약자 정보 이름으로 검색 후 삭제 / 삭제 전 검색 / 삭제 후 검색
 				System.out.println("\n*** 04. 홍길동 예약자 삭제 후 삭제한 예약자 검색 ***");
 				System.out.println("\n<< 삭제 전 예약자 검색 >>");
 				controller.getReservation("홍길동");
+				reservationCheck("검색");
 			
 				controller.deleteReservation("홍길동");
 				reservationCheck("삭제");
 				
 				System.out.println("\n<< 삭제 후 예약자 검색 >>");
 				controller.getReservation("홍길동");
-
+				reservationCheck("검색");
 			} 
 		}catch(IOException e) {
 			e.printStackTrace();
