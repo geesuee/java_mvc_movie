@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import movie.exception.DuplicateException;
 import movie.exception.NotExistException;
+import movie.exception.overBookedException;
 import movie.model.dto.Movie;
 import movie.model.dto.Reservation;
 import movie.model.dto.Theater;
@@ -131,13 +132,16 @@ public class MovieController {
 	 * 새로운 Reservation 저장
 	 * 
 	 * @param newReservation
+	 * @throws DuplicateException
+	 * @throws NotExistException
+	 * @throws overBookedException
 	 */
 	public void insertReservation(Reservation newReservation) {
 		if(newReservation != null) {
 			try {
 				service.reservationInsert(newReservation);
 				EndView.messageView(newReservation.getName() + "님의 예약이 저장 성공되었습니다.");
-			}catch(DuplicateException | NotExistException e) {
+			}catch(DuplicateException | NotExistException | overBookedException e) {
 				FailView.failMessageView(e.getMessage());
 			}
 		}else {
@@ -147,6 +151,9 @@ public class MovieController {
 	
 	/** 
 	 * 키보드로 정보를 입력해서 예약 정보 추가 
+	 * 
+	 * @throws IOException
+	 * @throws NoSuchElementException
 	 * 
 	 */
 	public Reservation startReservation() {
@@ -161,9 +168,7 @@ public class MovieController {
 			
 			return newReservation;
 			
-		}catch (IOException e) {
-			e.printStackTrace();
-		}catch (NoSuchElementException e) {
+		}catch (IOException | NoSuchElementException e) {
 			e.printStackTrace();
 		}finally {
 			try {
@@ -183,14 +188,16 @@ public class MovieController {
 	 * 
 	 * @param name
 	 * @param movieTitle
+	 * @throws NotExistException
+	 * @throws overBookedException 
 	 */
-	public void updateReservation(String name, String theaterNo, String movieTitle) {
+	public void updateReservation(String name, String theaterNo, String movieTitle) throws overBookedException {
 		if(movieTitle != null) {
 			try {
 				service.reservationUpdate(name, theaterNo, movieTitle);
-			} catch (NotExistException e) {
+			} catch (NotExistException | overBookedException e) {
 				FailView.failMessageView(e.getMessage());
-			}	
+			}
 		}else {
 			EndView.messageView("수정하고자 하는 영화 정보가 무효합니다, 재 확인 해 주세요");
 		}
@@ -203,6 +210,7 @@ public class MovieController {
 	 * 예약자 이름으로 검색해서 해당하는 예약 삭제
 	 * 
 	 * @param name
+	 * @throws NotExistException
 	 */
 	public void deleteReservation(String name) {
 		if(name != null) {

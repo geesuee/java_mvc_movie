@@ -10,6 +10,7 @@ import movie.model.dto.Theater;
 
 import movie.exception.DuplicateException;
 import movie.exception.NotExistException;
+import movie.exception.overBookedException;
 
 public class MovieService {
 	
@@ -130,15 +131,16 @@ public class MovieService {
 	 * 새로운 Reservation 추가 
 	 * 1. newReservation에 할당된 상영관 번호와 영화 제목이 매핑되어 있지 않을 경우, NotExistException 예외 발생
 	 * 2. newReservation에 할당된 예약번호가 중복될 경우, DuplicateException 예외 발생
-	 * 3. newReservation에 할당된 상영관에 잔여 좌석이 없을 경우, NotExistException 예외 발생
+	 * 3. newReservation에 할당된 상영관에 잔여 좌석이 없을 경우, overBookedException 예외 발생
 	 * 
 	 * 4. 예약 성공 시 해당 Reservation 상영관의 예약 좌석 수+1;
 	 * 
 	 * @param newReservation      저장하고자 하는 새로운 예약
 	 * @throws DuplicateException
 	 * @throws NotExistException 
+	 * @throws overBookedException 
 	 */
-	public void reservationInsert(Reservation newReservation) throws DuplicateException, NotExistException {
+	public void reservationInsert(Reservation newReservation) throws DuplicateException, NotExistException, overBookedException {
 		Theater newTheater = getTheater(newReservation.getTheaterNo());	
 		String mappedMovieTitle = getMovieInfo().get(newTheater).getMovieTitle();
 		
@@ -152,7 +154,7 @@ public class MovieService {
 			throw new DuplicateException("해당 예약 번호와 동일한 번호의 예약 내역이 존재합니다.");
 		}
 		if(theater.getRemainSeats() == 0) {
-			throw new NotExistException("해당 상영관에 잔여 좌석이 없습니다.");
+			throw new overBookedException("해당 상영관에 잔여 좌석이 없습니다.");
 		}
 		movieModel.insertReservation(newReservation);
 		theater.setBookedSeats(theater.getBookedSeats()+1);
@@ -164,7 +166,7 @@ public class MovieService {
 	 * Reservation의 영화 <상영관 번호, 영화 제목> 수정 - 예약자 이름으로 검색해서 해당 예약의 <상영관 번호, 영화 제목> 수정
 	 * 1. 수정하고자 하는 예약이 존재하지 않을 경우, NotExistException 발생
 	 * 2. 상영관 번호, 영화 제목이 movieInfo에 매핑되어 있지 않을 경우,(=해당 상영관에서 입력한 영화를 상영하지 않을 경우) NotExistException 발생
-	 * 3. 해당 상영관에 잔여 좌석이 없을 경우, NotExistException 예외 발생
+	 * 3. 해당 상영관에 잔여 좌석이 없을 경우, overBookedException 예외 발생
 	 * 
 	 * 4. 수정 성공 시
 	 * 		- 이전 상영관의 예약 좌석 수-1;
@@ -174,8 +176,9 @@ public class MovieService {
 	 * @param theaterNo 상영관 번호
 	 * @param movieTitle 영화 제목
 	 * @throws NotExistException
+	 * @throws overBookedException 
 	 */
-	public void reservationUpdate(String name, String movieTitle, String theaterNo) throws NotExistException {
+	public void reservationUpdate(String name, String movieTitle, String theaterNo) throws NotExistException, overBookedException {
 		Theater newTheater = getTheater(theaterNo);	
 		String mappedMovieTitle = getMovieInfo().get(newTheater).getMovieTitle();
 		
@@ -188,7 +191,7 @@ public class MovieService {
 			throw new NotExistException("입력하신 영화는 해당 상영관에서 상영하지 않습니다.");
 		}
 		if(newTheater.getRemainSeats() == 0) {
-			throw new NotExistException("해당 상영관에 잔여 좌석이 없습니다.");
+			throw new overBookedException("해당 상영관에 잔여 좌석이 없습니다.");
 		}
 		
 		// 이전 상영관의 예약 좌석 수-1;
