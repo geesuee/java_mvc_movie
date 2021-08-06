@@ -9,7 +9,7 @@
 - jUnit 활용 test
 
 ## ➰ Model
-- MovieModel : 가상 DB, MovieList, TheaterList, ReservationList 생성 및 할당, HashMap<Theater,Movie>movieInfo로 상영관 별 상영 영화 매핑
+- MovieModel : 가상 DB, MovieList/TheaterList/ReservationList 생성 및 할당, HashMap<Theater,Movie>movieInfo로 상영관별 상영 영화 매핑
 - Movie(DTO) : 영화 정보 객체
 - Theater(DTO) : 상영관 정보 객체
 - Reservation(DTO) : 예약 정보 객체
