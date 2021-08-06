@@ -6,7 +6,7 @@
 - Singleton design 적용
 - Exception 처리
 - log4j 활용 log 데이터 적재
-- junit 활용 test
+- jUnit 활용 test
 
 ## ➰ Model
 - MovieModel : 가상 DB, MovieList, TheaterList, ReservationList 생성 및 할당, HashMap<Theater,Movie>movieInfo로 상영관 별 상영 영화 매핑
