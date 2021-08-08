@@ -1,5 +1,14 @@
 # java miniProject(Movie)_develop.ver
 
+플레이데이터 팀프로젝트 결과물을 수정 및 디벨롭하여 완성한 코드입니다.
+- 상영관별 상영 영화 매핑
+- 특정 상영관의 영화 예매시 예약 좌석 수, 잔여 좌석 수 연산
+- 매핑 되지 않은 상영관-영화 예매 불가(예외 처리)
+- 잔여 좌석이 없는 상영관 예매 불가(예외 처리)
+등을 추가로 구현하였습니다.</br>
+
+🚩 팀원분들과 함께 만든 결과물은 [여기](https://github.com/ptkeb/20210805-miniproject)에서 확인해보실 수 있습니다. 
+
 ## 📽 미니 프로젝트(Movie) 개요
 : Movie(영화) DTO, Theater(상영관) DTO, Reservation(예약) DTO와 MVC 기반 CRUD 구현
 - MVC, DTO pattern 설계
